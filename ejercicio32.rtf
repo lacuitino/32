@@ -1,0 +1,128 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf400
+{\fonttbl\f0\fnil\fcharset0 HelveticaNeue;\f1\fnil\fcharset0 HelveticaNeue-Bold;}
+{\colortbl;\red255\green255\blue255;\red53\green53\blue53;\red220\green161\blue13;}
+{\*\expandedcolortbl;;\cssrgb\c27059\c27059\c27059;\cssrgb\c89412\c68627\c3922;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab560
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f0\fs24 \cf2 CREATE DATABASE pintagram;\
+\
+\\c pintagram\
+\
+CREATE TABLE users(\
+id_user serial primary key, \
+first_name varchar (15), \
+last_name varchar(20), \
+username varchar(20), \
+email varchar(20));\
+\
+CREATE TABLE images(\
+id_img serial primary key,\
+titulo varchar(10),\
+url_img varchar(50),\
+Descripci\'f3n varchar(100),\
+id_user INTEGER REFERENCES users(id_user));\
+\pard\pardeftab560\slleading20\pardirnatural\partightenfactor0
+\cf2 \
+\pard\pardeftab560\slleading20\partightenfactor0
+\cf2 CREATE TABLE likes(\
+ id_like serial primary key,\
+ id_img INTEGER REFERENCES images(id_img),\
+ id_user INTEGER REFERENCES users(id_user));\
+\pard\pardeftab560\slleading20\pardirnatural\partightenfactor0
+\cf2 \
+\pard\pardeftab560\slleading20\partightenfactor0
+\cf2 CREATE TABLE tags(\
+id_tag serial primary key,\
+nombre varchar(15));\
+CREATE TABLE\
+\pard\pardeftab560\slleading20\pardirnatural\partightenfactor0
+\cf2 \
+\pard\pardeftab560\slleading20\partightenfactor0
+\cf2 CREATE TABLE inter_table(\
+id_img INTEGER REFERENCES images(id_img),\
+id_tag INTEGER REFERENCES tags(id_tag));\
+\pard\pardeftab560\slleading20\pardirnatural\partightenfactor0
+\cf2 \
+\pard\pardeftab560\slleading20\partightenfactor0
+\cf2 ALTER TABLE likes ADD CONSTRAINT const1 UNIQUE(id_img,id_user);\
+\
+ALTER TABLE inter_table\
+RENAME TO tag_img;\
+\pard\pardeftab560\slleading20\pardirnatural\partightenfactor0
+\cf2 \
+\pard\pardeftab560\slleading20\partightenfactor0
+\cf2 ALTER TABLE tag_img ADD CONSTRAINT const3 PRIMARY KEY(id_tag, id_img);\
+\
+INSERT INTO users (first_name, last_name, username, email) VALUES ('lucas','cuitino','lacuitino','{\field{\*\fldinst{HYPERLINK "mailto:cuitino.lu@gmail.com"}}{\fldrslt \cf3 cuitino.lu@gmail.com}}\'92);\
+\
+pintagram=# INSERT INTO users (first_name, last_name, username, email) VALUES ('pedro','araya','pedroman','{\field{\*\fldinst{HYPERLINK "mailto:turbopedro@gmail.com"}}{\fldrslt \cf3 turbopedro@gmail.com}}\'92);\
+\
+ALTER TABLE likes ADD COLUMN likes boolean;\
+\
+INSERT INTO users\
+pintagram-# (first_name, last_name, username, email)\
+pintagram-# VALUES ('jose','tomas','joseto','josetomas@gmail.com');\
+\
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f1\b \cf2 \'97\'97\'97\'97\'97  LIKES\
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f0\b0 \cf2 INSERT INTO likes (id_img, id_user, likes) \
+VALUES (1,1,True);\
+\
+INSERT INTO likes (id_img, id_user, likes) \
+VALUES (2,1,True);\
+\
+INSERT INTO likes (id_img, id_user, likes) \
+VALUES (1,2,True);\
+\
+INSERT INTO likes (id_img, id_user, likes) \
+VALUES (2,2,True);\
+\
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f1\b \cf2 \'97\'97\'97\'97\'97 TAGS\
+\pard\pardeftab560\slleading20\pardirnatural\partightenfactor0
+
+\f0\b0 \cf2 NSERT INTO tag_img (id_img, id_tag) VALUES (1,1);\
+\
+INSERT INTO tag_img (id_img, id_tag) VALUES (1,2);\
+\
+INSERT INTO tag_img (id_img, id_tag) VALUES (1,3);\
+\
+INSERT INTO tag_img (id_img, id_tag) VALUES (2,4);\
+\
+INSERT INTO tag_img (id_img, id_tag) VALUES (2,5);\
+\
+INSERT INTO tag_img (id_img, id_tag) VALUES (2,6);\
+\pard\pardeftab560\slleading20\pardirnatural\partightenfactor0
+
+\f1\b \cf2 \
+\pard\pardeftab560\slleading20\partightenfactor0
+\cf2 \'97\'97\'97\'97\'97 CONSULTAS\
+(Muestra todas las imagines)\
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f0\b0 \cf2 SELECT titulo, count(likes) FROM images FULL JOIN likes ON (images.id_img = likes.id_img) GROUP BY titulo;\
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f1\b \cf2 \
+(Muestra solo im\'e1genes con likes)
+\f0\b0 \
+pintagram=# SELECT titulo, count(likes) FROM images INNER JOIN likes ON (images.id_img = likes.id_img) GROUP BY titulo;\
+
+\f1\b \
+\'97\'97\'97\'97\'97 CONSULTAS 2
+\f0\b0 \
+SELECT first_name, titulo FROM users FULL JOIN images ON (users.id_user = images.id_user);\
+\pard\pardeftab560\slleading20\pardirnatural\partightenfactor0
+
+\f1\b \cf2 \
+\pard\pardeftab560\slleading20\partightenfactor0
+\cf2 \'97\'97\'97\'97\'97 CONSULTAS 3\
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f0\b0 \cf2 SELECT nombre, COUNT(*) FROM tags INNER JOIN tag_img ON (tags.id_tag = tag_img.id_tag) GROUP BY nombre;}
